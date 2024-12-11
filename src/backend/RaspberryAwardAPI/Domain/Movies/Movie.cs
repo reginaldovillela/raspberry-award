@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using RaspberryAwardAPI.Domain.Producers;
 using RaspberryAwardAPI.Domain.SeedWork;
 using RaspberryAwardAPI.Domain.SeedWork.Interfaces;
+using RaspberryAwardAPI.Domain.Studios;
 
 namespace RaspberryAwardAPI.Domain.Movies;
 
@@ -22,6 +23,8 @@ public class Movie
     [Required]
     public bool Winner { get; private set; }
     
+    public List<Studio> Studios { get; private set; }
+
     public List<Producer> Producers { get; private set; }
     
     #region "ef requirements and relations"
@@ -37,6 +40,7 @@ public class Movie
         Title = title;
         SetYear(year);
         Winner = winner;
+        Studios = [];
         Producers = [];
     }
     
@@ -51,5 +55,20 @@ public class Movie
     public void AddProducer(Producer producer)
     {
         Producers.Add(producer);
+    }
+
+    public void AddProducers(List<Producer> producers)
+    {
+        Producers.AddRange(producers);
+    }
+
+    public void AddStudio(Studio studio)
+    {
+        Studios.Add(studio);
+    }
+
+    public void AddStudios(List<Studio> studios)
+    {
+        Studios.AddRange(studios);
     }
 }

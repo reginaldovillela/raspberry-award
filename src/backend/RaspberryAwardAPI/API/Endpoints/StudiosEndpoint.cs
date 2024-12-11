@@ -1,35 +1,35 @@
-using RaspberryAwardAPI.Domain.Studios;
+using RaspberryAwardAPI.Domain.Producers;
 
 namespace RaspberryAwardAPI.API.Endpoints;
 
 #pragma warning disable 1591
-internal class StudiosEndpointServices(IMediator mediator,
-                                         ILogger<StudiosEndpointServices> logger)
+internal class ProducersEndpointServices(IMediator mediator,
+                                         ILogger<ProducersEndpointServices> logger)
 {
     public IMediator Mediator { get; set; } = mediator;
 
-    public ILogger<StudiosEndpointServices> Logger { get; } = logger;
+    public ILogger<ProducersEndpointServices> Logger { get; } = logger;
 }
 
-public static class StudiosEndpoint
+public static class ProducersEndpoint
 {
-    private const string TagEndpoint = "Studios";
-    private const string BaseEndpoint = "studios";
+    private const string TagEndpoint = "Producers";
+    private const string BaseEndpoint = "producers";
 
-    public static void MapStudiosEndpoint(this IEndpointRouteBuilder app)
+    public static void MapProducersEndpoint(this IEndpointRouteBuilder app)
     {
         var api = app
             .MapGroup(BaseEndpoint)
             .WithTags(TagEndpoint)
             .WithOpenApi();
 
-        api.MapGet("/", GetStudiosAsync)
+        api.MapGet("/", GetProducersAsync)
            .ProducesProblem((int)HttpStatusCode.NotAcceptable);
     }
 
-    private static async Task<Results<Ok<Studio[]>,
+    private static async Task<Results<Ok<Producer[]>,
                               NotFound,
-                              BadRequest<string>>> GetStudiosAsync([AsParameters] StudiosEndpointServices services)
+                              BadRequest<string>>> GetProducersAsync([AsParameters] ProducersEndpointServices services)
     {
         // try
         // {

@@ -1,3 +1,4 @@
+using RaspberryAwardAPI.Application.Movies.Dtos;
 using RaspberryAwardAPI.Application.Movies.Queries;
 using RaspberryAwardAPI.Domain.Movies;
 
@@ -28,7 +29,7 @@ public static class MoviesEndpoint
            .ProducesProblem((int)HttpStatusCode.NotAcceptable);
     }
 
-    private static async Task<Results<Ok<Movie[]>,
+    private static async Task<Results<Ok<MovieDto[]>,
                               NotFound,
                               BadRequest<string>>> GetMoviesAsync([AsParameters] MoviesEndpointServices services)
     {
@@ -36,7 +37,7 @@ public static class MoviesEndpoint
         {
             var query = new GetMoviesQuery();
             var movies = await services.Mediator.Send(query);
-            
+
             return TypedResults.Ok(movies);
         }
         catch (Exception ex)
@@ -45,3 +46,7 @@ public static class MoviesEndpoint
         }
     }
 }
+
+public record ProducerT(string Name);
+
+public record MovieT(string Title, IList<ProducerT> Producers);

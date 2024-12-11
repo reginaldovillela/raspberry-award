@@ -14,7 +14,16 @@ public class RaspberryAwardContext(DbContextOptions<RaspberryAwardContext> optio
     public DbSet<Studio> Studios { get; init; }
     
     public DbSet<Producer> Producers { get; init; }
-    
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Movie>()
+            .HasMany(x=> x.Producers)
+            .WithMany(p=> p.Movies);
+
+        base.OnModelCreating(modelBuilder);
+    }
+
     public async Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default)
     {
         _ = await base.SaveChangesAsync(cancellationToken);

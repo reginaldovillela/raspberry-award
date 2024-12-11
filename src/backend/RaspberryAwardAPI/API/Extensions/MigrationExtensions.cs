@@ -17,22 +17,16 @@ internal static partial class MigrationExtensions
         using var raspberryAwardContext = scope.ServiceProvider.GetRequiredService<RaspberryAwardContext>();
         //raspberryAwardContext.Database.Migrate();
         raspberryAwardContext.Database.EnsureCreated();
-        
+
         foreach (var line in data)
         {
             if (!StartWithNumbers().IsMatch(line))
                 continue;
 
-            var studio = CreateStudio(line);
-            var producers = GetProducers(line);
-            var movie = CreateMovie(line);
-
-            raspberryAwardContext.Producers.AddRange(producers);
+            var studios = FindAndInsertStudios(line, raspberryAwardContext);
+            var producers = FindAndInsertProducers(line, raspberryAwardContext);
             
-            foreach (var producer in producers)
-                movie.AddProducer(producer);
-            
-            raspberryAwardContext.Movies.Add(movie);
+            FindInsertMovie(line, raspberryAwardContext, studios, producers);
         }
 
         raspberryAwardContext.SaveChanges();
@@ -43,29 +37,66 @@ internal static partial class MigrationExtensions
         return File.ReadAllLines("./Assets/data.csv");
     }
 
-    private static Studio CreateStudio(string line)
+    private static List<Studio> FindAndInsertStudios(string line, RaspberryAwardContext context)
     {
         var splitLine = line.Split(';');
         var name = splitLine[2];
-        return new Studio(name);
+        var studios = name.Split([",", "and"], StringSplitOptions.None);
+        var studioList = new List<Studio>(studios.Length);
+
+        foreach (var studio in studios)
+        {
+            var studioObject = context.Studios.Where(s => s.Name == studio).FirstOrDefault();
+
+            if (studioObject is not null)
+                studioList.Add(studioObject);
+            else
+            {
+                var newstudio = new Studio(studio);
+                context.Studios.Add(newstudio);
+                studioList.Add(newstudio);
+            }
+        }
+
+        return studioList;
     }
-    
-    private static Producer[] GetProducers(string line)
+
+    private static List<Producer> FindAndInsertProducers(string line, RaspberryAwardContext context)
     {
         var splitLine = line.Split(';');
         var name = splitLine[3];
         var producers = name.Split([",", "and"], StringSplitOptions.None);
-        return producers.Select(x=> new Producer(x)).ToArray();
-        //return new Producer(name);
+        var producerList = new List<Producer>(producers.Length);
+
+        foreach (var producer in producers)
+        {
+            var produceObject = context.Producers.Where(s => s.Name == producer).FirstOrDefault();
+
+            if (produceObject is not null)
+                producerList.Add(produceObject);
+            else
+                {
+                var newProducer = new Producer(producer);
+                context.Producers.Add(newProducer);
+                producerList.Add(newProducer);
+            }
+        }
+
+        return producerList;
     }
-    
-    private static Movie CreateMovie(string line)
+
+    private static void FindInsertMovie(string line, RaspberryAwardContext context, List<Studio> studios, List<Producer> producers)
     {
         var splitLine = line.Split(';');
         var year = ushort.Parse(splitLine[0]);
         var title = splitLine[1];
-        var winner  = splitLine[4] == "yes";
-        return new Movie(title, year, winner);
+        var winner = splitLine[4] == "yes";
+
+        var movie = new Movie(title, year, winner);
+        movie.AddStudios(studios);
+        movie.AddProducers(producers);
+
+        context.Movies.Add(movie);
     }
 
     [GeneratedRegex(@"^\d{4}")]

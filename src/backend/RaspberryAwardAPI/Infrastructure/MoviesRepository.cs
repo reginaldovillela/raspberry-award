@@ -12,17 +12,18 @@ public class MoviesRepository(RaspberryAwardContext context) : IMoviesRepository
     {
         //_ = await context.AddAsync(movie, cancellationToken);
         _ = await context.Movies.AddAsync(movie, cancellationToken);
-        return movie; 
+        return movie;
     }
 
     public async Task<ICollection<Movie>> GetAllAsync(CancellationToken cancellationToken)
     {
         var movies = await context
             .Movies
+            .Include(m => m.Producers)
             .OrderBy(m => m.Title)
             .AsNoTracking()
             .ToListAsync(cancellationToken);
-        
+
         return movies;
     }
 }
