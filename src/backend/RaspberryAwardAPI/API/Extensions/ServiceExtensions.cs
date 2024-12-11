@@ -1,7 +1,9 @@
 using System.Reflection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using RaspberryAwardAPI.Domain.Movies;
+using RaspberryAwardAPI.Infrastructure;
 
-namespace RaspberryAwardAPI.Extensions;
+namespace RaspberryAwardAPI.API.Extensions;
 
 internal static class ServiceExtensions
 {
@@ -27,19 +29,26 @@ internal static class ServiceExtensions
             config.SuppressInferBindingSourcesForParameters = true;
         });
     }
-
+    
     public static void AddApplicationServices(this IHostApplicationBuilder builder)
     {
         var services = builder.Services;
-
-        var config = builder.Configuration;
+        //var config = builder.Configuration;
 
         // mediatr
-        services.AddMediatR(config =>
+        services.AddMediatR(opt =>
         {
-            config.RegisterServicesFromAssemblyContaining<Program>();
+            opt.RegisterServicesFromAssemblyContaining<Program>();
         });
 
         services.AddValidatorsFromAssemblyContaining<Program>();
+
+        services.AddDbContext<RaspberryAwardContext>(opt =>
+        {
+            opt.UseInMemoryDatabase("RaspberryAwardDB");
+        });
+        
+        services.AddScoped<IMoviesRepository, MoviesRepository>();
+        services.AddScoped<RaspberryAwardContext>();
     }
 }

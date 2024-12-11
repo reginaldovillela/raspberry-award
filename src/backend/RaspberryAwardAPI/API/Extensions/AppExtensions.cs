@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using RaspberryAwardAPI.Endpoints;
+using RaspberryAwardAPI.API.Endpoints;
 
-namespace RaspberryAwardAPI.Extensions;
+namespace RaspberryAwardAPI.API.Extensions;
 
 internal static class AppExtensions
 {
@@ -14,14 +14,14 @@ internal static class AppExtensions
         {
             app.UseSwagger();
             app.UseSwaggerUI();
-
             app.MapHealthChecks("/health");
-
             app.MapHealthChecks("/alive", new HealthCheckOptions
             {
                 Predicate = r => r.Tags.Contains("live")
             });
         }
+        
+        app.ApplyMigrations();
     }
 
     public static void AddEndpoints(this WebApplication app)

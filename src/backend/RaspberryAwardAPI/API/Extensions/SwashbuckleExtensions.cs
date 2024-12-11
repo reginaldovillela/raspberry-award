@@ -1,4 +1,4 @@
-namespace RaspberryAwardAPI.Extensions;
+namespace RaspberryAwardAPI.API.Extensions;
 
 internal static class SwashbuckleExtensions
 {

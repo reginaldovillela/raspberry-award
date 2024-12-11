@@ -1,4 +1,4 @@
-using RaspberryAwardAPI.Extensions;
+using RaspberryAwardAPI.API.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -12,8 +12,3 @@ app.ConfigureDefaults();
 app.AddEndpoints();
 
 await app.RunAsync();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}

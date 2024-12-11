@@ -1,8 +1,11 @@
-namespace RaspberryAwardAPI.Endpoints;
+using RaspberryAwardAPI.Application.Movies.Queries;
+using RaspberryAwardAPI.Domain.Movies;
+
+namespace RaspberryAwardAPI.API.Endpoints;
 
 #pragma warning disable 1591
-public class MoviesEndpointServices(IMediator mediator,
-                                    ILogger<MoviesEndpointServices> logger)
+internal class MoviesEndpointServices(IMediator mediator,
+                                      ILogger<MoviesEndpointServices> logger)
 {
     public IMediator Mediator { get; set; } = mediator;
 
@@ -25,22 +28,20 @@ public static class MoviesEndpoint
            .ProducesProblem((int)HttpStatusCode.NotAcceptable);
     }
 
-    private static async Task<Results<Ok<string>,
+    private static async Task<Results<Ok<Movie[]>,
                               NotFound,
                               BadRequest<string>>> GetMoviesAsync([AsParameters] MoviesEndpointServices services)
     {
-        return await Task.Run(() =>
+        try
         {
-            try
-            {
-                return TypedResults.Ok("");
-            }
-            catch (Exception ex)
-            {
-                TypedResults.BadRequest(ex.Message);
-            }
-
-            return TypedResults.Ok("");
-        });
+            var query = new GetMoviesQuery();
+            var movies = await services.Mediator.Send(query);
+            
+            return TypedResults.Ok(movies);
+        }
+        catch (Exception ex)
+        {
+            return TypedResults.BadRequest(ex.Message);
+        }
     }
 }
