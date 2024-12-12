@@ -10,7 +10,9 @@ public class MoviesRepository(RaspberryAwardContext context) : IMoviesRepository
 
     public async Task<Movie> AddAsync(Movie movie, CancellationToken cancellationToken)
     {
-        //_ = await context.AddAsync(movie, cancellationToken);
+        context.Entry(movie.Studios).State = EntityState.Unchanged;
+        context.Entry(movie.Producers).State = EntityState.Unchanged;
+        
         _ = await context.Movies.AddAsync(movie, cancellationToken);
         return movie;
     }

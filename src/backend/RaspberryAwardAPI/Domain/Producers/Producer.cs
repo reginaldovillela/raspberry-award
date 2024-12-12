@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
 using RaspberryAwardAPI.Domain.Movies;
 using RaspberryAwardAPI.Domain.SeedWork;
 using RaspberryAwardAPI.Domain.SeedWork.Interfaces;
@@ -36,5 +35,10 @@ public class Producer
     public void AddMovie(Movie movie)
     {
         Movies.Add(movie);
+    }
+    
+    public void AddMovies(params Movie[] movies)
+    {
+        Movies.AddRange(movies);
     }
 }

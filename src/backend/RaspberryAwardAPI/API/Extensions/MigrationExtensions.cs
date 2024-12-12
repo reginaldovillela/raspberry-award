@@ -25,11 +25,10 @@ internal static partial class MigrationExtensions
 
             var studios = FindAndInsertStudios(line, raspberryAwardContext);
             var producers = FindAndInsertProducers(line, raspberryAwardContext);
-            
-            FindInsertMovie(line, raspberryAwardContext, studios, producers);
-        }
 
-        raspberryAwardContext.SaveChanges();
+            FindInsertMovie(line, raspberryAwardContext, studios, producers);
+            raspberryAwardContext.SaveChanges();
+        }
     }
 
     private static string[] ReadData()
@@ -46,15 +45,21 @@ internal static partial class MigrationExtensions
 
         foreach (var studio in studios)
         {
-            var studioObject = context.Studios.Where(s => s.Name == studio).FirstOrDefault();
+            var studioName = studio.Trim();
+
+            if (string.IsNullOrWhiteSpace(studioName))
+                continue;
+
+            var studioObject = context.Studios.FirstOrDefault(s => s.Name == studioName);
 
             if (studioObject is not null)
                 studioList.Add(studioObject);
             else
             {
-                var newstudio = new Studio(studio);
-                context.Studios.Add(newstudio);
-                studioList.Add(newstudio);
+                var newStudio = new Studio(studioName);
+                context.Studios.Add(newStudio);
+                //context.SaveChanges();
+                studioList.Add(newStudio);
             }
         }
 
@@ -70,14 +75,20 @@ internal static partial class MigrationExtensions
 
         foreach (var producer in producers)
         {
-            var produceObject = context.Producers.Where(s => s.Name == producer).FirstOrDefault();
+            var producerName = producer.Trim();
+
+            if (string.IsNullOrEmpty(producerName))
+                continue;
+
+            var produceObject = context.Producers.FirstOrDefault(s => s.Name == producerName);
 
             if (produceObject is not null)
                 producerList.Add(produceObject);
             else
-                {
-                var newProducer = new Producer(producer);
+            {
+                var newProducer = new Producer(producerName);
                 context.Producers.Add(newProducer);
+                //context.SaveChanges();
                 producerList.Add(newProducer);
             }
         }
@@ -85,7 +96,8 @@ internal static partial class MigrationExtensions
         return producerList;
     }
 
-    private static void FindInsertMovie(string line, RaspberryAwardContext context, List<Studio> studios, List<Producer> producers)
+    private static void FindInsertMovie(string line, RaspberryAwardContext context, List<Studio> studios,
+        List<Producer> producers)
     {
         var splitLine = line.Split(';');
         var year = ushort.Parse(splitLine[0]);
@@ -93,8 +105,8 @@ internal static partial class MigrationExtensions
         var winner = splitLine[4] == "yes";
 
         var movie = new Movie(title, year, winner);
-        movie.AddStudios(studios);
-        movie.AddProducers(producers);
+        movie.AddStudios(studios.ToArray());
+        movie.AddProducers(producers.ToArray());
 
         context.Movies.Add(movie);
     }

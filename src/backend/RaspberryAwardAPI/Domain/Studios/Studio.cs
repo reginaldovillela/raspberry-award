@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
+using RaspberryAwardAPI.Domain.Movies;
 using RaspberryAwardAPI.Domain.SeedWork;
 using RaspberryAwardAPI.Domain.SeedWork.Interfaces;
 
@@ -16,6 +16,8 @@ public class Studio
     [StringLength(100, MinimumLength = 5)]
     public string Name { get; private set; }
     
+    public List<Movie> Movies { get; private set; }
+    
     #region "ef requirements and relations"
 
 #pragma warning disable CS8618
@@ -27,5 +29,16 @@ public class Studio
     public Studio(string name)
     {
         Name = name;
+        Movies = [];
+    }
+    
+    public void AddMovie(Movie movie)
+    {
+        Movies.Add(movie);
+    }
+    
+    public void AddMovies(params Movie[] movies)
+    {
+        Movies.AddRange(movies);
     }
 }

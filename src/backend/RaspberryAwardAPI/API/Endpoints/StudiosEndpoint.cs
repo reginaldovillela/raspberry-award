@@ -1,47 +1,68 @@
-using RaspberryAwardAPI.Domain.Producers;
+using RaspberryAwardAPI.Application.Shared.Dtos;
+using RaspberryAwardAPI.Application.Studios.Dtos;
+using RaspberryAwardAPI.Application.Studios.Queries;
 
 namespace RaspberryAwardAPI.API.Endpoints;
 
 #pragma warning disable 1591
-internal class ProducersEndpointServices(IMediator mediator,
-                                         ILogger<ProducersEndpointServices> logger)
+internal class StudiosEndpointServices(
+    IMediator mediator,
+    ILogger<StudiosEndpointServices> logger)
 {
     public IMediator Mediator { get; set; } = mediator;
 
-    public ILogger<ProducersEndpointServices> Logger { get; } = logger;
+    public ILogger<StudiosEndpointServices> Logger { get; } = logger;
 }
 
-public static class ProducersEndpoint
+public static class StudiosEndpoint
 {
-    private const string TagEndpoint = "Producers";
-    private const string BaseEndpoint = "producers";
+    private const string TagEndpoint = "Studios";
+    private const string BaseEndpoint = "studios";
 
-    public static void MapProducersEndpoint(this IEndpointRouteBuilder app)
+    public static void MapStudiosEndpoint(this IEndpointRouteBuilder app)
     {
         var api = app
             .MapGroup(BaseEndpoint)
             .WithTags(TagEndpoint)
             .WithOpenApi();
 
-        api.MapGet("/", GetProducersAsync)
-           .ProducesProblem((int)HttpStatusCode.NotAcceptable);
+        api.MapGet("/", GetStudiosAsync).ProducesProblem((int)HttpStatusCode.NotAcceptable);
+        api.MapGet("/top-winners", GetTopWinnersStudiosAsync);
     }
 
-    private static async Task<Results<Ok<Producer[]>,
-                              NotFound,
-                              BadRequest<string>>> GetProducersAsync([AsParameters] ProducersEndpointServices services)
+    private static async Task<Results<
+        Ok<IEnumerable<StudioSharedDto>>,
+        NotFound,
+        BadRequest<string>>> GetStudiosAsync([AsParameters] StudiosEndpointServices services)
     {
-        // try
-        // {
-        //     var query = new GetMoviesQuery();
-        //     var movies = await services.Mediator.Send(query);
-        //     
-        //     return TypedResults.Ok(movies);
-        // }
-        // catch (Exception ex)
-        // {
-        //     return TypedResults.BadRequest(ex.Message);
-        // }
-        return null;
+        try
+        {
+            var query = new GetStudiosQuery();
+            var studios = await services.Mediator.Send(query);
+
+            return TypedResults.Ok(studios);
+        }
+        catch (Exception ex)
+        {
+            return TypedResults.BadRequest(ex.Message);
+        }
+    }
+
+    private static async Task<Results<
+        Ok<IEnumerable<TopWinnerStudioDto>>,
+        NotFound,
+        BadRequest<string>>> GetTopWinnersStudiosAsync([AsParameters] GetTopWinnersStudiosQuery query,
+                                                       [AsParameters] StudiosEndpointServices services)
+    {
+        try
+        {
+            var studios = await services.Mediator.Send(query);
+
+            return TypedResults.Ok(studios);
+        }
+        catch (Exception ex)
+        {
+            return TypedResults.BadRequest(ex.Message);
+        }
     }
 }

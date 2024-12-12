@@ -8,6 +8,11 @@ internal static class AppExtensions
     public static void ConfigureDefaults(this WebApplication app)
     {
         app.UseHttpsRedirection();
+        app.UseCors(builder => builder
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+        );
 
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
@@ -27,5 +32,7 @@ internal static class AppExtensions
     public static void AddEndpoints(this WebApplication app)
     {
         app.MapMoviesEndpoint();
+        app.MapStudiosEndpoint();
+        app.MapProducersEndpoint();
     }
 }

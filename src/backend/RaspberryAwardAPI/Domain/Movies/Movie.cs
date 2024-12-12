@@ -57,7 +57,7 @@ public class Movie
         Producers.Add(producer);
     }
 
-    public void AddProducers(List<Producer> producers)
+    public void AddProducers(params Producer[] producers)
     {
         Producers.AddRange(producers);
     }
@@ -67,7 +67,7 @@ public class Movie
         Studios.Add(studio);
     }
 
-    public void AddStudios(List<Studio> studios)
+    public void AddStudios(params Studio[] studios)
     {
         Studios.AddRange(studios);
     }

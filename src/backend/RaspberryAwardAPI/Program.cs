@@ -1,7 +1,6 @@
 using RaspberryAwardAPI.API.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
-var configuration = builder.Configuration;
 
 builder.AddDefaultServices();
 builder.AddApplicationServices();
