@@ -1,4 +1,5 @@
 using RaspberryAwardAPI.Domain.Producers;
+using RaspberryAwardAPI.Domain.SeedWork;
 using RaspberryAwardAPI.Domain.SeedWork.Interfaces;
 
 namespace RaspberryAwardAPI.Infrastructure;
@@ -16,7 +17,7 @@ public class ProducersRepository(RaspberryAwardContext context) : IProducersRepo
         return producer;
     }
 
-    public async Task<ICollection<Producer>> GetProducersAsync(CancellationToken cancellationToken)
+    public async Task<IEnumerable<Producer>> GetAllAsync(CancellationToken cancellationToken)
     {
         var producers = await context
             .Producers
@@ -28,11 +29,34 @@ public class ProducersRepository(RaspberryAwardContext context) : IProducersRepo
         return producers;
     }
 
-    public async Task<ICollection<Producer>> GetProducersAlreadyWinnerAsync(CancellationToken cancellationToken)
+    public async Task<PagedList<Producer>> GetAllPagedAsync(ushort pageNumber, ushort pageSize, CancellationToken cancellationToken)
+    {
+        var totalRecords = context
+           .Producers
+           .CountAsync();
+
+        var producers = context
+            .Producers
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .Include(m => m.Movies)
+            .OrderBy(m => m.Name)
+            .AsNoTracking()
+            .ToListAsync();
+
+        await Task.WhenAll(totalRecords, producers);
+
+        return new PagedList<Producer>(producers.Result,
+                                       pageNumber,
+                                       pageSize,
+                                       (ushort)totalRecords.Result);
+    }
+
+    public async Task<IEnumerable<Producer>> GetAllAlreadyWinnerAsync(CancellationToken cancellationToken)
     {
         var producers = context
             .Producers
-            .Include(p => p.Movies)
+            .Include(p => p.Movies.Where(m => m.Winner))
             .Where(p => p.Movies.Any(m => m.Winner))
             .OrderBy(p => p.Name)
             .AsNoTracking();

@@ -1,6 +1,7 @@
 using RaspberryAwardAPI.Application.Movies.Dtos;
 using RaspberryAwardAPI.Application.Movies.Queries;
-using RaspberryAwardAPI.Domain.Movies;
+using RaspberryAwardAPI.Application.Shared.Dtos;
+using RaspberryAwardAPI.Application.Shared.Results;
 
 namespace RaspberryAwardAPI.API.Endpoints;
 
@@ -25,17 +26,18 @@ public static class MoviesEndpoint
             .WithTags(TagEndpoint)
             .WithOpenApi();
 
-        api.MapGet("/", GetMoviesAsync)
-           .ProducesProblem((int)HttpStatusCode.NotAcceptable);
+        api.MapGet("/", GetMoviesAsync);
+        api.MapGet("/years-with-winners", GetYearsWithWinnersAsync);
     }
 
-    private static async Task<Results<Ok<MovieDto[]>,
-                              NotFound,
-                              BadRequest<string>>> GetMoviesAsync([AsParameters] MoviesEndpointServices services)
+    private static async Task<Results<
+        Ok<PagedResult<MovieSharedWithStudiosAndProducersDto>>,
+        NotFound,
+        BadRequest<string>>> GetMoviesAsync([AsParameters] GetMoviesQuery query,
+                                            [AsParameters] MoviesEndpointServices services)
     {
         try
         {
-            var query = new GetMoviesQuery();
             var movies = await services.Mediator.Send(query);
 
             return TypedResults.Ok(movies);
@@ -45,8 +47,22 @@ public static class MoviesEndpoint
             return TypedResults.BadRequest(ex.Message);
         }
     }
+
+    private static async Task<Results<
+        Ok<IEnumerable<YearSumWinnerDto>>,
+        NotFound,
+        BadRequest<string>>> GetYearsWithWinnersAsync([AsParameters] GetYearsWithWinnersQuery query,
+                                                      [AsParameters] MoviesEndpointServices services)
+    {
+        try
+        {
+            var years = await services.Mediator.Send(query);
+
+            return TypedResults.Ok(years);
+        }
+        catch (Exception ex)
+        {
+            return TypedResults.BadRequest(ex.Message);
+        }
+    }
 }
-
-public record ProducerT(string Name);
-
-public record MovieT(string Title, IList<ProducerT> Producers);

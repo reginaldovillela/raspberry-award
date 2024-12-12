@@ -1,3 +1,4 @@
+using RaspberryAwardAPI.Domain.SeedWork;
 using RaspberryAwardAPI.Domain.SeedWork.Interfaces;
 
 namespace RaspberryAwardAPI.Domain.Producers;
@@ -7,7 +8,9 @@ public interface IProducersRepository : IRepository<Producer>
 {
     Task<Producer> AddAsync(Producer producer, CancellationToken cancellationToken);
     
-    Task<ICollection<Producer>> GetProducersAsync(CancellationToken cancellationToken);
+    Task<IEnumerable<Producer>> GetAllAsync(CancellationToken cancellationToken);
     
-    Task<ICollection<Producer>> GetProducersAlreadyWinnerAsync(CancellationToken cancellationToken);
+    Task<PagedList<Producer>> GetAllPagedAsync(ushort pageNumber, ushort pageSize, CancellationToken cancellationToken);
+
+    Task<IEnumerable<Producer>> GetAllAlreadyWinnerAsync(CancellationToken cancellationToken);
 }

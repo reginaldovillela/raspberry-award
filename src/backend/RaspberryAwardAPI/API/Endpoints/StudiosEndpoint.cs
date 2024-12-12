@@ -1,4 +1,5 @@
 using RaspberryAwardAPI.Application.Shared.Dtos;
+using RaspberryAwardAPI.Application.Shared.Results;
 using RaspberryAwardAPI.Application.Studios.Dtos;
 using RaspberryAwardAPI.Application.Studios.Queries;
 
@@ -31,13 +32,13 @@ public static class StudiosEndpoint
     }
 
     private static async Task<Results<
-        Ok<IEnumerable<StudioSharedDto>>,
+        Ok<PagedResult<StudioSharedDto>>,
         NotFound,
-        BadRequest<string>>> GetStudiosAsync([AsParameters] StudiosEndpointServices services)
+        BadRequest<string>>> GetStudiosAsync([AsParameters] GetStudiosQuery query,
+                                             [AsParameters] StudiosEndpointServices services)
     {
         try
         {
-            var query = new GetStudiosQuery();
             var studios = await services.Mediator.Send(query);
 
             return TypedResults.Ok(studios);

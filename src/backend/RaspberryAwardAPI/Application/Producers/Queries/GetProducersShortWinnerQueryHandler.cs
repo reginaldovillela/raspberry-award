@@ -9,7 +9,9 @@ public class GetProducersShortWinnerQueryHandler(
 {
     public async Task<object> Handle(GetProducersShortWinnerQuery request, CancellationToken cancellationToken)
     {
-        var producers = await repository.GetProducersAlreadyWinnerAsync(cancellationToken);
+        var producers = await repository.GetAllAlreadyWinnerAsync(cancellationToken);
+
+        logger.LogInformation("Consulta concluída. Total de {@count} encontrados", producers.Count());
 
         var producer = FindProducer(producers);
 
@@ -26,7 +28,7 @@ public class GetProducersShortWinnerQueryHandler(
         };
     }
 
-    private static Producer FindProducer(ICollection<Producer> producers)
+    private static Producer FindProducer(IEnumerable<Producer> producers)
     {
         var currentInterval = 1000;
         Producer? currentProducer = null;

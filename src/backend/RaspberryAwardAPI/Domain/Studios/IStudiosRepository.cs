@@ -1,3 +1,4 @@
+using RaspberryAwardAPI.Domain.SeedWork;
 using RaspberryAwardAPI.Domain.SeedWork.Interfaces;
 
 namespace RaspberryAwardAPI.Domain.Studios;
@@ -7,7 +8,9 @@ public interface IStudiosRepository : IRepository<Studio>
 {
     Task<Studio> AddAsync(Studio studio, CancellationToken cancellationToken);
     
-    Task<ICollection<Studio>> GetAllAsync(CancellationToken cancellationToken);
+    Task<IEnumerable<Studio>> GetAllAsync(CancellationToken cancellationToken);
+
+    Task<PagedList<Studio>> GetAllPagedAsync(ushort pageNumber, ushort pageSize, CancellationToken cancellationToken);
     
-    Task<ICollection<Studio>> GetAllHasMovieWinnerAsync(CancellationToken cancellationToken);
+    Task<IEnumerable<Studio>> GetAllAlreadyWinnerAsync(CancellationToken cancellationToken);
 }

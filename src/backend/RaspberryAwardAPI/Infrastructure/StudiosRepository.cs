@@ -1,3 +1,4 @@
+using RaspberryAwardAPI.Domain.SeedWork;
 using RaspberryAwardAPI.Domain.SeedWork.Interfaces;
 using RaspberryAwardAPI.Domain.Studios;
 
@@ -10,11 +11,13 @@ public class StudiosRepository(RaspberryAwardContext context) : IStudiosReposito
 
     public async Task<Studio> AddAsync(Studio studio, CancellationToken cancellationToken)
     {
+        context.Entry(studio.Movies).State = EntityState.Unchanged;
+
         _ = await context.Studios.AddAsync(studio, cancellationToken);
         return studio;
     }
 
-    public async Task<ICollection<Studio>> GetAllAsync(CancellationToken cancellationToken)
+    public async Task<IEnumerable<Studio>> GetAllAsync(CancellationToken cancellationToken)
     {
         var studios = await context
             .Studios
@@ -25,7 +28,30 @@ public class StudiosRepository(RaspberryAwardContext context) : IStudiosReposito
         return studios;
     }
 
-    public async Task<ICollection<Studio>> GetAllHasMovieWinnerAsync(CancellationToken cancellationToken)
+    public async Task<PagedList<Studio>> GetAllPagedAsync(ushort pageNumber, ushort pageSize, CancellationToken cancellationToken)
+    {
+        var totalRecords = context
+           .Studios
+           .CountAsync();
+
+        var studios = context
+            .Studios
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .Include(m => m.Movies)
+            .OrderBy(m => m.Name)
+            .AsNoTracking()
+            .ToListAsync();
+
+        await Task.WhenAll(totalRecords, studios);
+
+        return new PagedList<Studio>(studios.Result,
+                                     pageNumber,
+                                     pageSize,
+                                     (ushort)totalRecords.Result);
+    }
+
+    public async Task<IEnumerable<Studio>> GetAllAlreadyWinnerAsync(CancellationToken cancellationToken)
     {
         var studios = await context
             .Studios

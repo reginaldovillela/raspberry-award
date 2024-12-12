@@ -12,9 +12,9 @@ public class GetTopWinnersStudiosQueryHandler(
     public async Task<IEnumerable<TopWinnerStudioDto>> Handle(GetTopWinnersStudiosQuery request,
         CancellationToken cancellationToken)
     {
-        var studios = await repository.GetAllHasMovieWinnerAsync(cancellationToken);
+        var studios = await repository.GetAllAlreadyWinnerAsync(cancellationToken);
 
-        logger.LogInformation("Consulta concluída. Total de {@count} encontrados", studios.Count);
+        logger.LogInformation("Consulta concluída. Total de {@count} encontrados", studios.Count());
 
         return studios
             .OrderByDescending(s => s.Movies.Count)

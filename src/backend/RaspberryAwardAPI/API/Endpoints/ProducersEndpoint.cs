@@ -1,5 +1,6 @@
-using RaspberryAwardAPI.Application.Producers.Dtos;
 using RaspberryAwardAPI.Application.Producers.Queries;
+using RaspberryAwardAPI.Application.Shared.Dtos;
+using RaspberryAwardAPI.Application.Shared.Results;
 
 namespace RaspberryAwardAPI.API.Endpoints;
 
@@ -28,13 +29,13 @@ public static class ProducersEndpoint
         api.MapGet("/short-winner", GetProducersShortWinnerAsync);
     }
 
-    private static async Task<Results<Ok<IEnumerable<ProducerDto>>,
+    private static async Task<Results<Ok<PagedResult<ProducerSharedDto>>,
                               NotFound,
-                              BadRequest<string>>> GetProducersAsync([AsParameters] ProducersEndpointServices services)
+                              BadRequest<string>>> GetProducersAsync([AsParameters]GetProducersQuery query,
+                                                                     [AsParameters] ProducersEndpointServices services)
     {
         try
         {
-            var query = new GetProducersQuery();
             var producers = await services.Mediator.Send(query);
             
             return TypedResults.Ok(producers);
