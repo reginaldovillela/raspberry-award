@@ -53,6 +53,7 @@ export class ListMoviesByYearComponent implements OnInit {
   }
 
   onFilterByYear(year: string) {
+    console.log(year);
     if (year.length == 0 || year.length == 4) {
       this.currentPageNumber = 1;
       this.getData();

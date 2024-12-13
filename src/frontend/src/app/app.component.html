@@ -1,6 +1,21 @@
 <app-top-bar></app-top-bar>
 
-<!-- <app-list></app-list> -->
+<div class="container-fluid sidebar">
+  <div class="row">
+    <!-- menu -->
+    <div class="col-2 bg-body-tertiary sidebar">
+      <ul class="nav flex-column align-items-center">
+        <li class="nav-item">
+          <a  [routerLink]="['dashboard']" class="nav-link">Dashboard</a>
+        </li>
+        <li class="nav-item">
+          <a [routerLink]="['list']" class="nav-link">List</a>
+        </li>
+      </ul>
+    </div>
 
-<app-dashboard></app-dashboard>
-<router-outlet />
+    <main class="col-10 ms-sm-auto">
+      <router-outlet />
+    </main>
+  </div>
+</div>

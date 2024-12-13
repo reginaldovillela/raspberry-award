@@ -11,6 +11,7 @@ import { StudiosTopWinnersComponent } from './pages/dashboard/studios-top-winner
 import { TopBarComponent } from './components/top-bar/top-bar.component';
 import { YearsMultipleWinnersComponent } from './pages/dashboard/years-multiple-winners/years-multiple-winners.component';
 import { ListMoviesByYearComponent } from './pages/dashboard/list-movies-by-year/list-movies-by-year.component';
+import { ProducersWinMinMaxComponent } from './pages/dashboard/producers-win-min-max/producers-win-min-max.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { ListMoviesByYearComponent } from './pages/dashboard/list-movies-by-year
     StudiosTopWinnersComponent,
     TopBarComponent,
     YearsMultipleWinnersComponent,
-    ListMoviesByYearComponent
+    ListMoviesByYearComponent,
+    ProducersWinMinMaxComponent
   ],
   imports: [
     BrowserModule,

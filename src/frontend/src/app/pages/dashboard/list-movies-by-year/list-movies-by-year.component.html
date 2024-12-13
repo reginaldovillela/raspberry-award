@@ -1,7 +1,16 @@
 <h4>List movie winners by year</h4>
 
-<input [(ngModel)]="currentFilterByYear" (input)="onFilterByYear($any($event.target).value)"
-  class="form-control form-control-sm" type="number" placeholder="Filter by Year" aria-label="Filter by Year">
+<div class="row">
+  <div class="col-10">
+    <input [(ngModel)]="currentFilterByYear" class="form-control form-control-sm" type="number" maxlength="4"
+      placeholder="Filter by Year" aria-label="Filter by Year">
+  </div>
+  <div class="col-2">
+    <button (click)="onFilterByYear(currentFilterByYear)" class="btn btn-sm btn-primary">Search</button>
+  </div>
+</div>
+
+<div class="mb-2"></div>
 
 <table class="table table-sm table-bordered table-striped table-hover">
   <thead>
