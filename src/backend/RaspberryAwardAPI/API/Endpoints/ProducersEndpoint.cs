@@ -26,18 +26,19 @@ public static class ProducersEndpoint
             .WithOpenApi();
 
         api.MapGet("/", GetProducersAsync);
-        api.MapGet("/short-winner", GetProducersShortWinnerAsync);
+        api.MapGet("/min-max-winner", GetProducersMinMaxWinnerAsync);
     }
 
-    private static async Task<Results<Ok<PagedResult<ProducerSharedDto>>,
-                              NotFound,
-                              BadRequest<string>>> GetProducersAsync([AsParameters]GetProducersQuery query,
-                                                                     [AsParameters] ProducersEndpointServices services)
+    private static async Task<Results<
+        Ok<PagedResult<ProducerSharedDto>>,
+        NotFound,
+        BadRequest<string>>> GetProducersAsync([AsParameters] GetProducersQuery query,
+                                               [AsParameters] ProducersEndpointServices services)
     {
         try
         {
             var producers = await services.Mediator.Send(query);
-            
+
             return TypedResults.Ok(producers);
         }
         catch (Exception ex)
@@ -45,16 +46,17 @@ public static class ProducersEndpoint
             return TypedResults.BadRequest(ex.Message);
         }
     }
-    
-    private static async Task<Results<Ok<object>,
+
+    private static async Task<Results<
+        Ok<ProducersWinnerMinMax>,
         NotFound,
-        BadRequest<string>>> GetProducersShortWinnerAsync([AsParameters] ProducersEndpointServices services)
+        BadRequest<string>>> GetProducersMinMaxWinnerAsync([AsParameters] ProducersEndpointServices services)
     {
         try
         {
-            var query = new GetProducersShortWinnerQuery();
+            var query = new GetProducersWinnerMinMaxQuery();
             var producers = await services.Mediator.Send(query);
-            
+
             return TypedResults.Ok(producers);
         }
         catch (Exception ex)

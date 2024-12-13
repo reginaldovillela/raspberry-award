@@ -50,7 +50,11 @@ export class BackendService {
     includeMovies: boolean
   ): Observable<GetStudiosTopWinnersData[]> {
     let url = `${this.baseUrl}/studios/top-winners?limit=${limit}&includeMovies=${includeMovies}`;
-
     return this.http.get<GetStudiosTopWinnersData[]>(url);
+  }
+
+  getProducersMinMaxWinner(): Observable<GetProducersMinMaxWinner> {
+    let url = `${this.baseUrl}/producers/min-max-winner`;
+    return this.http.get<GetProducersMinMaxWinner>(url);
   }
 }

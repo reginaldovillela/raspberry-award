@@ -54,13 +54,14 @@ public class ProducersRepository(RaspberryAwardContext context) : IProducersRepo
 
     public async Task<IEnumerable<Producer>> GetAllAlreadyWinnerAsync(CancellationToken cancellationToken)
     {
-        var producers = context
+        var producers = await context
             .Producers
             .Include(p => p.Movies.Where(m => m.Winner))
             .Where(p => p.Movies.Any(m => m.Winner))
             .OrderBy(p => p.Name)
-            .AsNoTracking();
+            .AsNoTracking()
+            .ToListAsync(cancellationToken);
 
-        return await producers.Where(p => p.Movies.Count >= 2).ToListAsync(cancellationToken);
+        return producers;
     }
 }

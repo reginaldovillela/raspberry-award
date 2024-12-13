@@ -1,1 +1,40 @@
-<p>producers-win-min-max works!</p>
+<h4>Producers with longest and shortest interval between wins</h4>
+<h3>Maximum</h3>
+<table class="table table-sm table-bordered table-striped table-hover">
+    <thead>
+        <tr>
+            <th scope="col">Producer</th>
+            <th scope="col">Interval</th>
+            <th scope="col">Previous Year</th>
+            <th scope="col">Following Year</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{producersMinMaxWinner.max.producer}}</td>
+            <td>{{producersMinMaxWinner.max.interval}}</td>
+            <td>{{producersMinMaxWinner.max.previousYearWin}}</td>
+            <td>{{producersMinMaxWinner.max.previousYearWin}}</td>
+        </tr>
+    </tbody>
+</table>
+
+<h3>Minimum</h3>
+<table class="table table-sm table-bordered table-striped table-hover">
+    <thead>
+        <tr>
+            <th scope="col">Producer</th>
+            <th scope="col">Interval</th>
+            <th scope="col">Previous Year</th>
+            <th scope="col">Following Year</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{producersMinMaxWinner.min.producer}}</td>
+            <td>{{producersMinMaxWinner.min.interval}}</td>
+            <td>{{producersMinMaxWinner.min.previousYearWin}}</td>
+            <td>{{producersMinMaxWinner.min.previousYearWin}}</td>
+        </tr>
+    </tbody>
+</table>

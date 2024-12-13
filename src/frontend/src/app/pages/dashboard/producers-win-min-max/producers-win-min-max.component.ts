@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { GetProducersMinMaxWinner } from '../../../models/get-producers-min-max-winner';
+import { BackendService } from '../../../services/backend.service';
 
 @Component({
   selector: 'app-producers-win-min-max',
@@ -7,6 +9,24 @@ import { Component } from '@angular/core';
   templateUrl: './producers-win-min-max.component.html',
   styleUrl: './producers-win-min-max.component.css'
 })
-export class ProducersWinMinMaxComponent {
+export class ProducersWinMinMaxComponent implements OnInit {
+
+  producersMinMaxWinner?: GetProducersMinMaxWinner;
+
+  constructor(private backend: BackendService) {}
+
+  ngOnInit(): void {
+    this.getData();
+  }
+
+  async getData() {
+    this.backend
+      .getProducersMinMaxWinner()
+      .subscribe({
+        next: (res) => {
+          this.producersMinMaxWinner = res;
+        },
+      });
+  }
 
 }
