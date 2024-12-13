@@ -1,4 +1,4 @@
-# Raspberry
+# Raspberry Award
 
 ## Requeriments to run it
 1. .net 8 SDK 8.0.403 - You can download [here](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/sdk-8.0.403-windows-x64-installer) or you can run a powershell script [here](https://dotnet.microsoft.com/download/dotnet/scripts/v1/dotnet-install.ps1)
