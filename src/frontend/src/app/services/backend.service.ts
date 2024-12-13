@@ -5,6 +5,7 @@ import { environment } from '../../environments/env.dev';
 import { GetMoviesData } from '../models/get-movies-data';
 import { GetStudiosTopWinnersData } from '../models/get-studios-top-winners-data';
 import { GetYearMultipleWinnersData } from '../models/get-years-multiple-winners-data';
+import { GetProducersMinMaxWinner } from '../models/get-producers-min-max-winner';
 
 @Injectable({
   providedIn: 'root',

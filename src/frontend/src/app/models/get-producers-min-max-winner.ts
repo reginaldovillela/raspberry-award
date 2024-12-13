@@ -10,5 +10,5 @@ export type GetProducersMinMaxWinner = {
     interval: number;
     previousYearWin: number;
     follingYearWin: number;
-  }
+  },
 };

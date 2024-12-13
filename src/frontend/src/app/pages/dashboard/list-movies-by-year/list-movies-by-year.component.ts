@@ -21,7 +21,6 @@ export class ListMoviesByYearComponent implements OnInit {
   constructor(private backend: BackendService) {}
 
   ngOnInit(): void {
-    this.getData();
   }
 
   generatePageList(totalPages: number): void {
@@ -52,11 +51,12 @@ export class ListMoviesByYearComponent implements OnInit {
     this.getData();
   }
 
-  onFilterByYear(year: string) {
-    console.log(year);
-    if (year.length == 0 || year.length == 4) {
+  onFilterByYear() {
+    if (this.currentFilterByYear.length == 4) {
       this.currentPageNumber = 1;
       this.getData();
+    } else {
+      this.movieData = {} as GetMoviesData;
     }
   }
 }
