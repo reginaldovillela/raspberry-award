@@ -49,7 +49,7 @@ public static class MoviesEndpoint
     }
 
     private static async Task<Results<
-        Ok<IEnumerable<YearSumWinnerDto>>,
+        Ok<IEnumerable<YearWithWinnerDto>>,
         NotFound,
         BadRequest<string>>> GetYearsWithWinnersAsync([AsParameters] GetYearsWithWinnersQuery query,
                                                       [AsParameters] MoviesEndpointServices services)

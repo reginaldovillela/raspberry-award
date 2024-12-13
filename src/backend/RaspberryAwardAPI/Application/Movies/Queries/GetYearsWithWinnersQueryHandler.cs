@@ -8,9 +8,9 @@ namespace RaspberryAwardAPI.Application.Movies.Queries;
 #pragma warning disable 1591
 public class GetYearsWithWinnersQueryHandler(ILogger<GetYearsWithWinnersQueryHandler> logger,
                                              IMoviesRepository repository)
-    : IRequestHandler<GetYearsWithWinnersQuery, IEnumerable<YearSumWinnerDto>>
+    : IRequestHandler<GetYearsWithWinnersQuery, IEnumerable<YearWithWinnerDto>>
 {
-    public async Task<IEnumerable<YearSumWinnerDto>> Handle(GetYearsWithWinnersQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<YearWithWinnerDto>> Handle(GetYearsWithWinnersQuery request, CancellationToken cancellationToken)
     {
         var years = await repository.GetYearsWithWinnersAsync(cancellationToken);
 
@@ -20,6 +20,6 @@ public class GetYearsWithWinnersQueryHandler(ILogger<GetYearsWithWinnersQueryHan
             .OrderByDescending(y => y.Value)
             .ThenBy(y=> y.Value)
             .Take(request.Limit)
-            .Select(y => new YearSumWinnerDto(y.Key, y.Value));
+            .Select(y => new YearWithWinnerDto(y.Key, y.Value));
     }
 }

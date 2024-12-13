@@ -13,6 +13,8 @@ public class GetMoviesQueryHandler(ILogger<GetMoviesQueryHandler> logger,
     {
         var movies = await repository.GetAllPagedAsync(request.PageNumber, 
                                                        request.PageSize, 
+                                                       request.Year,
+                                                       request.Winner,
                                                        cancellationToken);
 
         logger.LogInformation("Consulta concluída. Total de {@count} encontrados", movies.Items.Count());

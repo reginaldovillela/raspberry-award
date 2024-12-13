@@ -13,10 +13,4 @@ public class PagedList<T>(IEnumerable<T> itens,
     public ushort PageSize { get; } = pageSize;
 
     public ushort TotalRecords { get; } = totalRecords;
-
-    public ushort TotalPages => (ushort)Math.Abs(TotalRecords / PageSize);
-
-    public bool HasNextPage => PageNumber * PageSize < TotalRecords;
-
-    public bool HasPreviousPage => PageNumber > 1;
 }

@@ -11,7 +11,10 @@ public interface IMoviesRepository : IRepository<Movie>
 
     Task<IEnumerable<Movie>> GetAllAsync(CancellationToken cancellationToken);
 
-    Task<PagedList<Movie>> GetAllPagedAsync(ushort pageNumber, ushort pageSize, CancellationToken cancellationToken);
+    Task<PagedList<Movie>> GetAllPagedAsync(ushort pageNumber, 
+                                            ushort pageSize, 
+                                            ushort? year, 
+                                            bool? winner, CancellationToken cancellationToken);
 
     Task<IDictionary<ushort, ushort>> GetYearsWithWinnersAsync(CancellationToken cancellationToken);
 }

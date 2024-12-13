@@ -6,7 +6,7 @@ namespace RaspberryAwardAPI.Application.Studios.Queries;
 public class GetTopWinnersStudiosQuery
     : IRequest<IEnumerable<TopWinnerStudioDto>>
 {
-    [DefaultValue(1)]
+    [DefaultValue(3)]
     [FromQuery(Name = "limit")]
     public ushort Limit { get; init; } = 3;
 

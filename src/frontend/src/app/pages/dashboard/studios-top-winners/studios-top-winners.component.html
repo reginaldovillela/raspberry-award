@@ -1,0 +1,15 @@
+<h4>Top {{limit}} studios with winners</h4>
+<table class="table table-sm table-bordered table-striped table-hover">
+  <thead>
+    <tr>
+      <th scope="col">Name</th>
+      <th scope="col">Win Count</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let studio of studiosTopWinnersData">
+      <td>{{studio.name}}</td>
+      <td>{{studio.winCount}}</td>
+    </tr>
+  </tbody>
+</table>

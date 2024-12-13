@@ -19,7 +19,7 @@ public class GetProducersQueryHandler(
             producers.Items.Select(p => new ProducerSharedDto(p.EntityId, p.Name)),
             producers.PageNumber,
             producers.PageSize,
-            producers.TotalPages
+            producers.TotalRecords
         );
     }
 }

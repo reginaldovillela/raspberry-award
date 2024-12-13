@@ -1,0 +1,10 @@
+.top-bar-container {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.top-bar-container-wrapper {
+  background-color: #303030;
+  color: #f8f8f8;
+  padding: 7px 0 7px 25px;
+}

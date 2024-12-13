@@ -1,0 +1,56 @@
+<select class="form-select" [(ngModel)]="currentPageSize" (change)="onChangePageSize($any($event.target).value)">
+  <option *ngFor="let pageSize of listPageSize" value={{pageSize}}>
+    {{pageSize}}
+</select>
+
+<table class="table table-sm table-bordered table-striped table-hover">
+  <thead>
+    <tr>
+      <th scope="col">Id</th>
+      <th scope="col">Year
+        <input [(ngModel)]="currentFilterByYear" (input)="onFilterByYear($any($event.target).value)" class="form-control form-control-sm" type="number" placeholder="Filter by Year" aria-label="Filter by Year">
+      </th>
+      <th scope="col">Title</th>
+      <th scope="col">Winner?
+        <select class="form-select" [(ngModel)]="currentTypeofWinner" (change)="onChangeWinnersYesNo($any($event.target).value)">
+          <option *ngFor="let typeofWinner of listTypeofWinner" value={{typeofWinner}}>
+            {{typeofWinner}}
+        </select>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let movie of movieData?.items">
+      <td>{{movie.id}}</td>
+      <td>{{movie.year}}</td>
+      <td>{{movie.title}}</td>
+      <td>{{movie.winner | toYesNo}}</td>
+    </tr>
+  </tbody>
+</table>
+<nav aria-label="Table pagination">
+  <ul class="pagination justify-content-center">
+    <li class="page-item">
+      <a class="page-link"
+         [ngClass]="{'disabled': !movieData?.hasPreviousPage}"
+         (click)="onChangePageNumber(movieData?.pageNumber! - 1)"
+         href="#" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+    <li *ngFor="let page of listPageNumber" class="page-item">
+      <a class="page-link"
+         [ngClass]="{'active': page == movieData?.pageNumber}"
+         (click)="onChangePageNumber(page)" href="#">{{page}}</a>
+    </li>
+
+    <li class="page-item">
+      <a class="page-link"
+        [ngClass]="{'disabled': !movieData?.hasNextPage}"
+        (click)="onChangePageNumber(movieData?.pageNumber! + 1)"
+        href="#" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+  </ul>
+</nav>
